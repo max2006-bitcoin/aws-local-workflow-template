@@ -30,22 +30,14 @@ resource "helm_release" "oneuptime" {
   wait    = true
   timeout = 1200
 
-  set = [
-    {
-      name  = "host"
-      value = "uptime.crypterio.co"
-    },
-    {
-      name  = "httpProtocol"
-      value = "https"
-    },
-    {
-      name  = "global.storageClass"
-      value = "standard"
-    }
-  ]
+  values = [
+  <<-EOT
+host: uptime.crypterio.co
+httpProtocol: https
 
-  depends_on = [
-    helm_release.argo_events
-  ]
+  global:
+    storageClass: standard
+EOT
+]
+  depends_on = [helm_release.argo_events]
 }
