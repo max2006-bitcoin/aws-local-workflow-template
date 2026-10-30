@@ -1,5 +1,5 @@
 
-### - Argo Events - ### 
+### ---  Application  --- ### 
 resource "helm_release" "argo_events" {
   name             = "argo-events"
   repository       = "https://argoproj.github.io/argo-helm"
@@ -18,5 +18,34 @@ resource "helm_release" "argo_events" {
   ]
 }
 
+resource "helm_release" "oneuptime" {
+  name       = "oneuptime"
+  repository = "https://helm-chart.oneuptime.com"
+  chart      = "oneuptime"
+  namespace  = "oneuptime"
+  create_namespace = true
 
+  atomic          = true
+  cleanup_on_fail = true
+  wait    = true
+  timeout = 1200
 
+  set = [
+    {
+      name  = "host"
+      value = "uptime.crypterio.co"
+    },
+    {
+      name  = "httpProtocol"
+      value = "https"
+    },
+    {
+      name  = "global.storageClass"
+      value = "standart"
+    }
+  ]
+
+  depends_on = [
+    helm_release.argo_events
+  ]
+}
