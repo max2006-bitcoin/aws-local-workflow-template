@@ -22,6 +22,7 @@ resource "helm_release" "oneuptime" {
   name             = "oneuptime"
   repository       = "https://helm-chart.oneuptime.com"
   chart            = "oneuptime"
+  version          = "14.0.78"
   namespace        = "oneuptime"
   create_namespace = true
 
@@ -31,16 +32,22 @@ resource "helm_release" "oneuptime" {
   timeout         = 1200
 
   values = [
-    <<-EOT
-      host: uptime.crypterio.co
-      httpProtocol: https
+    yamlencode({
+      host         = "uptime.crypterio.co"
+      httpProtocol = "https"
 
-      global:
-        storageClass: standard
-    EOT
+      global = {
+        storageClass = "standard"
+      }
+
+      # Explicitly define Azure marketplace configuration as an object.
+      azure = {
+        tenantId     = null
+        clientId     = null
+        clientSecret = null
+      }
+    })
   ]
 
-  depends_on = [
-    helm_release.argo_events
-  ]
+  depends_on = [helm_release.argo_events]
 }
