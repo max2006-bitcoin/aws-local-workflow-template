@@ -39,15 +39,9 @@ resource "helm_release" "oneuptime" {
       global = {
         storageClass = "standard"
       }
-
-      # Explicitly define Azure marketplace configuration as an object.
-      azure = {
-        tenantId     = null
-        clientId     = null
-        clientSecret = null
-      }
     })
   ]
 
   depends_on = [helm_release.argo_events]
 }
+
