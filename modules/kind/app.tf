@@ -19,25 +19,28 @@ resource "helm_release" "argo_events" {
 }
 
 resource "helm_release" "oneuptime" {
-  name       = "oneuptime"
-  repository = "https://helm-chart.oneuptime.com"
-  chart      = "oneuptime"
-  namespace  = "oneuptime"
+  name             = "oneuptime"
+  repository       = "https://helm-chart.oneuptime.com"
+  chart            = "oneuptime"
+  namespace        = "oneuptime"
   create_namespace = true
 
   atomic          = true
   cleanup_on_fail = true
-  wait    = true
-  timeout = 1200
+  wait            = true
+  timeout         = 1200
 
   values = [
-  <<-EOT
-host: uptime.crypterio.co
-httpProtocol: https
+    <<-EOT
+      host: uptime.crypterio.co
+      httpProtocol: https
 
-  global:
-    storageClass: standard
-EOT
-]
-  depends_on = [helm_release.argo_events]
+      global:
+        storageClass: standard
+    EOT
+  ]
+
+  depends_on = [
+    helm_release.argo_events
+  ]
 }
