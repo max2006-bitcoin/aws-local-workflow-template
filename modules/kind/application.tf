@@ -41,7 +41,7 @@ resource "helm_release" "oneuptime" {
     },
     {
       name  = "global.storageClass"
-      value = "standart"
+      value = "standard"
     }
   ]
 
